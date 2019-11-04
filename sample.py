@@ -2,14 +2,14 @@ from pyalgotrade import plotter, strategy
 from pyalgotrade.bar import Frequency
 from pyalgotrade.barfeed.csvfeed import GenericBarFeed
 from pyalgotrade.stratanalyzer import sharpe
-from pyalgotrade.technical import ma
+from pyalgotrade.technical import ma, macd
 
 from pyalgotrade_mootdx import tools
 
 
-class Strategy(strategy.BacktestingStrategy):
+class MyStrategy(strategy.BacktestingStrategy):
     def __init__(self, feed, instrument):
-        super(Strategy, self).__init__(feed)
+        super(MyStrategy, self).__init__(feed)
 
         self.__position = None
         self.__sma = ma.SMA(feed[instrument].getCloseDataSeries(), 150)
@@ -56,11 +56,11 @@ class Strategy(strategy.BacktestingStrategy):
 
 
 def main():
-    instruments = ["600036"]
-    feeds = tools.build_feed(instruments, 2017, 2018, "histdata")
+    instruments = ["000651"]
+    feeds = tools.build_feed(instruments, 2009, 2019, "histdata")
 
     # 3.实例化策略
-    strat = Strategy(feeds, instruments[0])
+    strat = MyStrategy(feeds, instruments[0])
 
     # 4.设置指标和绘图
     ratio = sharpe.SharpeRatio()
@@ -73,7 +73,7 @@ def main():
 
     # 6.输出夏普率、绘图
     strat.info("夏普比率: " + str(ratio.getSharpeRatio(0)))
-    # plter.plot()
+    plter.plot()
 
 
 if __name__ == '__main__':
